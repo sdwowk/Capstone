@@ -132,8 +132,6 @@ int main(void)
 
   unsigned char **data_array= malloc(SCREEN_WIDTH * sizeof(unsigned char*));
   int i;
-  time_t time1, time2;
-  time1 = time(0);
   for(i = 0; i < SCREEN_WIDTH; i++){
     data_array[i] = malloc(SCREEN_HEIGHT * sizeof(unsigned char));
   }
@@ -146,18 +144,15 @@ int main(void)
 
   alt_up_pixel_buffer_dma_clear_screen(vga_buffer, 0);
 
+  time_t time1, time_2;
 
   draw_bitmap(data_array, vga_buffer);
-
-
-
 
 
   for(i = 0; i < SCREEN_WIDTH; i++){
 	  free(data_array[i]);
   }
   free(data_array);
-  time2 = time(0);
   return 0;
 }
 

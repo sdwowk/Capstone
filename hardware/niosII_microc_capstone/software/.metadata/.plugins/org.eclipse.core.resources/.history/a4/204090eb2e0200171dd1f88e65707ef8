@@ -153,11 +153,15 @@ int main(void)
 
 
 
-  for(i = 0; i < SCREEN_WIDTH; i++){
+  for(i = 0; i < SCREEN_HEIGHT; i++){
 	  free(data_array[i]);
   }
   free(data_array);
   time2 = time(0);
+
+  printf("Time elapsed %s \n",ctime(time1));
+
+  printf("Time elapsed %s\n", ctime(time2));
   return 0;
 }
 

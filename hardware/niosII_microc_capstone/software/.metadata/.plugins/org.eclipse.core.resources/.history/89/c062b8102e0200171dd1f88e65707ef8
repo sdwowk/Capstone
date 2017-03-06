@@ -137,7 +137,7 @@ int main(void)
   for(i = 0; i < SCREEN_WIDTH; i++){
     data_array[i] = malloc(SCREEN_HEIGHT * sizeof(unsigned char));
   }
-
+  time2 = time(0);
   load_bmp(file_handle, data_array);
 
   printf("Done Reading File \n");
@@ -150,14 +150,15 @@ int main(void)
   draw_bitmap(data_array, vga_buffer);
 
 
+  printf("Time elapsed %s \n",ctime(time1));
 
+  printf("Time elapsed %s\n", ctime(time2));
 
 
   for(i = 0; i < SCREEN_WIDTH; i++){
 	  free(data_array[i]);
   }
   free(data_array);
-  time2 = time(0);
   return 0;
 }
 
