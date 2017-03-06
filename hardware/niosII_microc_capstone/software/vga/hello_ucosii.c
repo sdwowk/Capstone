@@ -56,9 +56,9 @@ OS_STK    task2_stk[TASK_STACKSIZE];
 
 void load_bmp(int file_handle, unsigned char **data_array)
 {
-
+  int times_read;
   for(times_read = 0; times_read < BMP_OFFSET; times_read++){
-    data = alt_up_sd_card_read(file_handle);
+    alt_up_sd_card_read(file_handle);
   }
 
   int x, y;
@@ -82,6 +82,8 @@ void load_bmp(int file_handle, unsigned char **data_array)
 
     }
   }
+
+
 }
 
 /**************************************************************************
@@ -89,11 +91,12 @@ void load_bmp(int file_handle, unsigned char **data_array)
  *    Draws a bitmap.                                                     *
  **************************************************************************/
 
-void draw_bitmap(unsigned char **data_array)
+void draw_bitmap(unsigned char **data_array, alt_up_pixel_buffer_dma_dev *vga_buffer)
 {
+  int x, y;
   for(y = 0; y < SCREEN_HEIGHT; y++){
     for(x = 0; x < SCREEN_WIDTH; x++){
-      alt_up_pixel_buffer_dma_draw(vga_buffer, data_array[x + SCREEN_HEIGHT*y],x,y);
+      alt_up_pixel_buffer_dma_draw(vga_buffer, data_array[x][y],x,y);
 
     }
   }
@@ -126,25 +129,26 @@ int main(void)
   printf("File Attributes: %d\n",file_attributes );
   printf("Reading Data \n");
 
-  unsigned char **data_array = malloc(SCREEN_WIDTH * sizeof(unsigned char*));
+  unsigned char **data_array= malloc(SCREEN_WIDTH * sizeof(unsigned char*));
   int i;
   for(i = 0; i < SCREEN_WIDTH; i++){
     data_array[i] = malloc(SCREEN_HEIGHT * sizeof(unsigned char));
   }
-  
+
   load_bmp(file_handle, data_array);
 
   printf("Done Reading File \n");
   //OSTimeDly(1);
-  printf("Number of reads: %d\n", times_read);
+//  printf("Number of reads: %d\n", times_read);
 
   alt_up_pixel_buffer_dma_clear_screen(vga_buffer, 0);
 
-  while(1){
-    draw_bitmap(data_array);
+  draw_bitmap(data_array, vga_buffer);
 
+
+  for(i = 0; i < SCREEN_WIDTH; i++){
+	  free(data_array[i]);
   }
-
   free(data_array);
   return 0;
 }
